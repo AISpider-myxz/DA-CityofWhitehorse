@@ -76,7 +76,7 @@ DOWNLOADER_MIDDLEWARES = {
 # 'scrapy_redis.pipelines.RedisPipeline': 300
 ITEM_PIPELINES = {
    "AISpider.pipelines.MysqlScrapyPipeline": 300,
-	'crawlab.scrapy.pipelines.CrawlabPipeline': 888,
+	#'crawlab.scrapy.pipelines.CrawlabPipeline': 888,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

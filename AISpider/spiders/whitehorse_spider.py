@@ -527,10 +527,10 @@ class WhitehorseSpider(scrapy.Spider):
                         lodged_date = detail1
                         time_array = time.strptime(lodged_date, '%d/%m/%Y')
                         temp_data = int(time.mktime(time_array))
-                        item['decision_date'] = temp_data if lodged_date else None
+                        item['decision_date'] = temp_data if lodged_date else 0
                         item['decision_type'] = detail2
                     except:
-                        item['decision_date'] = None
+                        item['decision_date'] = 0
                         item['decision_type'] = ''
         except:
             pass
@@ -574,33 +574,35 @@ class WhitehorseSpider(scrapy.Spider):
                 lodged_date = temp_dict['Application Date']
                 time_array = time.strptime(lodged_date, '%d/%m/%Y')
                 temp_data = int(time.mktime(time_array))
-                item['application_date'] = temp_data if lodged_date else None
+                item['application_date'] = temp_data if lodged_date else 0
             except:
-                item['application_date'] = None
+                item['application_date'] = 0
             try:
                 lodged_date = temp_dict['To be Commenced By Date']
                 time_array = time.strptime(lodged_date, '%d/%m/%Y')
                 temp_data = int(time.mktime(time_array))
-                item['to_be_commenced_by_date'] =temp_data if lodged_date else None
+                item['to_be_commenced_by_date'] =temp_data if lodged_date else 0
             except:
-                item['to_be_commenced_by_date'] = None
+                item['to_be_commenced_by_date'] = 0
             try:
                 lodged_date = temp_dict['Lodgement Date']
                 time_array = time.strptime(lodged_date, '%d/%m/%Y')
                 temp_data = int(time.mktime(time_array))
-                item['lodgement_date'] = temp_data if lodged_date else None
+                item['lodgement_date'] = temp_data if lodged_date else 0
             except:
-                item['lodgement_date'] = None
+                item['lodgement_date'] = 0
             try:
                 lodged_date = temp_dict['Expiry Date']
                 time_array = time.strptime(lodged_date, '%d/%m/%Y')
                 temp_data = int(time.mktime(time_array))
-                item['expiry_date'] =  temp_data if lodged_date else None
+                item['expiry_date'] =  temp_data if lodged_date else 0
             except:
-                item['expiry_date'] = None
+                item['expiry_date'] = 0
               
         except:
             print('特殊情况未判定')
+        item['metadata']={}
+        del item['metadata']
         yield item
         print("=============================================================")
 
@@ -646,12 +648,12 @@ class WhitehorseSpider(scrapy.Spider):
                 time_array = time.strptime(lodged_date, '%d/%m/%Y')
                 temp_data = int(time.mktime(time_array))
             except:
-                temp_data = None
-            item['start_date'] =  temp_data if lodged_date else None
+                temp_data = 0
+            item['start_date'] =  temp_data if lodged_date else 0
             item['name_details'] = temp
         except:
             item['name_details'] = ''
-            item['start_date'] = None
+            item['start_date'] = 0
         
         url = f"https://edocsprod.whitehorse.vic.gov.au/KapishWebGrid/default.aspx?s=eServicesFiles&container={temp_dict['Application Number']}"
         resp = requests.get(url=url,headers=self.headers)
@@ -664,5 +666,7 @@ class WhitehorseSpider(scrapy.Spider):
         for url in url_list1:
             document += url.get('href').replace(url.get('href').split('&')[2]+"&",'')+';'
         item['document'] = document
+        item['metadata']={}
+        del item['metadata']
         yield item
    
